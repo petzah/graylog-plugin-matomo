@@ -11,13 +11,11 @@ public class PiwikInstance {
     private static final Logger LOG = LoggerFactory.getLogger(PiwikInstance.class);
 
     private String piwik_url;
-    private String piwik_token;
     private List<PiwikSite> siteList;
     private PiwikHttp piwikHttp;
 
     public PiwikInstance(String piwik_url, String piwik_token) {
         this.piwik_url = piwik_url;
-        this.piwik_token = piwik_token;
         this.piwikHttp = new PiwikHttp(piwik_url, piwik_token);
         this.siteList = piwikHttp.getAllSites();
         LOG.warn("DEBUG: Loaded " + siteList.size() + " sites from " + piwik_url);
