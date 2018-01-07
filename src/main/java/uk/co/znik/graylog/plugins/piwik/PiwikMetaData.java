@@ -15,7 +15,7 @@ public class PiwikMetaData implements PluginMetaData{
 
     @Override
     public String getUniqueId() {
-        return "uk.co.znik.graylog.plugins.Piwik";
+        return "uk.co.znik.graylog.plugins.PiwikPlugin";
     }
 
     @Override
@@ -35,7 +35,7 @@ public class PiwikMetaData implements PluginMetaData{
 
     @Override
     public Version getVersion() {
-        return Version.fromPluginProperties(this.getClass(), PLUGIN_PROPERTIES, "version", Version.from(0, 0, 1, "unknown"));
+        return Version.fromPluginProperties(this.getClass(), PLUGIN_PROPERTIES, "version", Version.from(0, 0, 0, "unknown"));
     }
     @Override
     public String getDescription() {

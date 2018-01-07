@@ -13,9 +13,12 @@ import org.graylog2.plugin.inputs.annotations.FactoryClass;
 import org.graylog2.plugin.outputs.MessageOutput;
 import org.graylog2.plugin.outputs.MessageOutputConfigurationException;
 import org.graylog2.plugin.streams.Stream;
+import org.piwik.java.tracking.PiwikRequest;
+import org.piwik.java.tracking.PiwikTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URL;
 import java.util.List;
 
 
@@ -28,6 +31,7 @@ public class PiwikOutput implements MessageOutput {
     private static final String PIWIK_SITE_CREATE = "piwik_site_create";
 
     private PiwikInstance piwikInstance;
+    private PiwikTracker piwikTracker;
     private boolean running;
     private final Configuration configuration;
 
@@ -38,6 +42,7 @@ public class PiwikOutput implements MessageOutput {
         }
         configuration = c;
         piwikInstance = new PiwikInstance(c.getString(PIWIK_URL), c.getString(PIWIK_TOKEN));
+        piwikTracker = new PiwikTracker(c.getString(PIWIK_URL)+"/piwik.php");
         running = true;
     }
 
@@ -52,17 +57,24 @@ public class PiwikOutput implements MessageOutput {
 
     public void write(Message message) throws Exception {
         //LOG.warn("DEBUG: message is: " + message);
+        String request_scheme = (String) message.getField("request_scheme")+"://";
         String host = (String) message.getField("host");
-        // we don't have host/site which is required, skip this message
-        if (host == null)
+        String request_uri = (String) message.getField("request_uri");
+        // we don't have host/site or request_uri which is required, skip this message
+        if ((host == null) || (request_uri == null) || (request_scheme == null))
             return;
         // http or https?
-        String request_scheme = (String) message.getField("request_scheme");
         PiwikSite piwikSite = piwikInstance.getSite(host);
-        //LOG.warn("DEBUG: got site with name: " + piwikSite + " from " + piwikInstance);
         if (piwikSite == null && configuration.getBoolean(PIWIK_SITE_CREATE)) {
             piwikSite = piwikInstance.addNewSite(host, request_scheme+"://"+host);
         }
+        URL actionUrl = new URL(request_scheme+host+request_uri);
+
+        PiwikRequest piwikRequest = new PiwikRequest(piwikSite.getIdsite(), actionUrl);
+        piwikRequest.setVisitorId((String) message.getField("remote_addr"));
+        piwikRequest.setHeaderUserAgent((String) message.getField("user_agent"));
+        piwikRequest.setAuthToken(configuration.getString(PIWIK_TOKEN));
+        piwikTracker.sendRequest(piwikRequest);
 
         //sender.sendMessage(message);
     }

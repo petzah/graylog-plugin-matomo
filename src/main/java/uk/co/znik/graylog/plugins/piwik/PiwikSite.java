@@ -1,5 +1,6 @@
 package uk.co.znik.graylog.plugins.piwik;
 
+
 public class PiwikSite {
 
     private String name;
@@ -31,5 +32,9 @@ public class PiwikSite {
     @Override
     public String toString() {
         return name;
+    }
+
+    public String getMainUrl() {
+        return main_url;
     }
 }

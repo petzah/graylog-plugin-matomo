@@ -22,6 +22,7 @@ public class PiwikHttp {
     private final OkHttpClient httpClient;
 
     private static final Headers.Builder commonHeaders = new Headers.Builder()
+            .add("User-Agent", "graylog-plugin-piwik")
             .add("Content-Type", "application/x-www-form-urlencoded")
             .add("Accept-Encoding","identity");
 
