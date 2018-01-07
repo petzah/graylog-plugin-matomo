@@ -71,7 +71,7 @@ public class PiwikOutput implements MessageOutput {
         URL actionUrl = new URL(request_scheme+host+request_uri);
 
         PiwikRequest piwikRequest = new PiwikRequest(piwikSite.getIdsite(), actionUrl);
-        piwikRequest.setVisitorId((String) message.getField("remote_addr"));
+        piwikRequest.setVisitorIp((String) message.getField("remote_addr"));
         piwikRequest.setHeaderUserAgent((String) message.getField("user_agent"));
         piwikRequest.setAuthToken(configuration.getString(PIWIK_TOKEN));
         piwikTracker.sendRequest(piwikRequest);
