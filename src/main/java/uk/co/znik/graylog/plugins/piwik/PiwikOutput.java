@@ -2,6 +2,7 @@ package uk.co.znik.graylog.plugins.piwik;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.graylog2.plugin.Message;
 import org.graylog2.plugin.configuration.Configuration;
 import org.graylog2.plugin.configuration.ConfigurationRequest;
@@ -19,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
+import java.security.MessageDigest;
 import java.util.List;
 
 
@@ -60,20 +62,29 @@ public class PiwikOutput implements MessageOutput {
         String request_scheme = (String) message.getField("request_scheme")+"://";
         String host = (String) message.getField("host");
         String request_uri = (String) message.getField("request_uri");
+        String remote_addr = (String) message.getField("remote_addr");
+        String http_user_agent = (String) message.getField("http_user_agent");
+
+        String visitorId = DigestUtils.sha1Hex(remote_addr+http_user_agent).substring(0,16);
+
         // we don't have host/site or request_uri which is required, skip this message
         if ((host == null) || (request_uri == null) || (request_scheme == null))
             return;
         // http or https?
         PiwikSite piwikSite = piwikInstance.getSite(host);
         if (piwikSite == null && configuration.getBoolean(PIWIK_SITE_CREATE)) {
-            piwikSite = piwikInstance.addNewSite(host, request_scheme+"://"+host);
+            piwikSite = piwikInstance.addNewSite(host, request_scheme+host);
         }
+
         URL actionUrl = new URL(request_scheme+host+request_uri);
 
         PiwikRequest piwikRequest = new PiwikRequest(piwikSite.getIdsite(), actionUrl);
         piwikRequest.setAuthToken(configuration.getString(PIWIK_TOKEN)); // must be first
-        piwikRequest.setVisitorIp((String) message.getField("remote_addr"));
-        piwikRequest.setHeaderUserAgent((String) message.getField("user_agent"));
+
+        piwikRequest.setVisitorId(visitorId);
+        piwikRequest.setVisitorIp(remote_addr);
+        piwikRequest.setHeaderUserAgent(http_user_agent);
+
         piwikTracker.sendRequest(piwikRequest);
 
         //sender.sendMessage(message);
