@@ -44,18 +44,18 @@ public class MatomoHttp {
         HashMap<String, String> params = new HashMap<>();
         params.put("method", "SitesManager.getAllSites");
         try {
-            sites = objectMapper.readValue(callPiwikApi(params), new TypeReference<List<MatomoSite>>(){});
+            sites = objectMapper.readValue(callMatomoApi(params), new TypeReference<List<MatomoSite>>(){});
         } catch (IOException e) {
             e.printStackTrace();
         }
         return sites;
     }
 
-    private MatomoSite getSiteFromPiwik(Integer idsite) {
+    private MatomoSite getSiteFromMatomo(Integer idsite) {
         HashMap<String,String> params = new HashMap<>();
         params.put("idSite", idsite.toString());
         params.put("method", "SitesManager.getSiteFromId");
-        JsonNode rootNode = getJsonResponse(callPiwikApi(params));
+        JsonNode rootNode = getJsonResponse(callMatomoApi(params));
         MatomoSite site = null;
         try {
             site = objectMapper.readValue(rootNode.toString(), MatomoSite.class);
@@ -65,15 +65,15 @@ public class MatomoHttp {
         return site;
     }
 
-    synchronized public MatomoSite getSiteFromPiwik(String name) {
+    synchronized public MatomoSite getSiteFromMatomo(String name) {
         MatomoSite matomoSite = null;
         HashMap<String, String> params = new HashMap<>();
         params.put("url", name);
         params.put("method", "SitesManager.getSitesIdFromSiteUrl");
 
-        JsonNode rootNode = getJsonResponse(callPiwikApi(params));
+        JsonNode rootNode = getJsonResponse(callMatomoApi(params));
         if (rootNode.size() != 0) {
-            matomoSite = getSiteFromPiwik(rootNode.get(0).path("idsite").asInt());
+            matomoSite = getSiteFromMatomo(rootNode.get(0).path("idsite").asInt());
             LOG.warn("DEBUG: Got site: " + matomoSite.getName() + " from matomo with id: " + matomoSite.getIdsite());
         }
         return matomoSite;
@@ -86,9 +86,9 @@ public class MatomoHttp {
         params.put("siteName", name);
         params.put("method", "SitesManager.addSite");
 
-        JsonNode rootNode = getJsonResponse(callPiwikApi(params));
+        JsonNode rootNode = getJsonResponse(callMatomoApi(params));
         Integer idsite = rootNode.path("value").asInt();
-        return getSiteFromPiwik(idsite);
+        return getSiteFromMatomo(idsite);
     }
 
     private JsonNode getJsonResponse(byte[] responseBody) {
@@ -102,7 +102,7 @@ public class MatomoHttp {
         return jsonNode;
     }
 
-    private byte[] callPiwikApi(HashMap<String, String> params) {
+    private byte[] callMatomoApi(HashMap<String, String> params) {
         params.putAll(commonParams);
         FormBody.Builder builder = new FormBody.Builder();
         for ( Map.Entry<String, String> entry : params.entrySet()) {

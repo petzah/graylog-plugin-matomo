@@ -26,7 +26,7 @@ public class MatomoInstance {
         try {
             return siteList.stream().filter(s -> s.getName().equals(name)).findFirst().get();
         } catch (NoSuchElementException e) {
-            matomoSite = matomoHttp.getSiteFromPiwik(name);
+            matomoSite = matomoHttp.getSiteFromMatomo(name);
             if (matomoSite != null) {
                 LOG.warn("DEBUG: Got site " + matomoSite.getName() + " from matomo server: " + this);
                 addSite(matomoSite);

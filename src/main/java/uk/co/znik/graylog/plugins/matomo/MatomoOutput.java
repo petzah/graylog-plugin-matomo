@@ -123,13 +123,13 @@ public class MatomoOutput implements MessageOutput {
             final ConfigurationRequest configurationRequest = new ConfigurationRequest();
 
             configurationRequest.addField(new TextField(
-                    MATOMO_URL, "Piwik URI", "",
+                    MATOMO_URL, "Matomo URI", "",
                     "HTTP address of matomo installation",
                     ConfigurationField.Optional.NOT_OPTIONAL)
             );
             configurationRequest.addField(new TextField(
-                    MATOMO_TOKEN, "Piwik Token", "",
-                    "Piwik user token to access API",
+                    MATOMO_TOKEN, "Matomo Token", "",
+                    "Matomo user token to access API",
                     ConfigurationField.Optional.NOT_OPTIONAL)
             );
             configurationRequest.addField(new BooleanField(
@@ -142,8 +142,8 @@ public class MatomoOutput implements MessageOutput {
 
     public static class Descriptor extends MessageOutput.Descriptor {
         public Descriptor() {
-            super("Piwik Output", false, "",
-                    "Writes messages to your Piwik installation via it's API.");
+            super("Matomo Output", false, "",
+                    "Writes messages to your Matomo installation via it's API.");
         }
     }
 

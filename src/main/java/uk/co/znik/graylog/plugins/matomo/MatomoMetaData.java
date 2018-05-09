@@ -20,7 +20,7 @@ public class MatomoMetaData implements PluginMetaData{
 
     @Override
     public String getName() {
-        return "Piwik plugin";
+        return "Matomo plugin";
     }
 
     @Override
@@ -39,7 +39,7 @@ public class MatomoMetaData implements PluginMetaData{
     }
     @Override
     public String getDescription() {
-        return "Writes messages to Piwik installation.";
+        return "Writes messages to Matomo installation.";
     }
 
     @Override
