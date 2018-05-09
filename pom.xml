@@ -19,7 +19,7 @@
     <packaging>jar</packaging>
 
     <name>${project.artifactId}</name>
-    <description>Graylog Mamoto plugin.</description>
+    <description>Graylog Matomo plugin.</description>
 
     <scm>
         <connection>scm:git:git@gitlab.com:petzah/graylog-plugin-matomo.git</connection>

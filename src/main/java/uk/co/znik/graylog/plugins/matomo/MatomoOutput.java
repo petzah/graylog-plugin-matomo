@@ -32,7 +32,7 @@ public class MatomoOutput implements MessageOutput {
     private static final String MATOMO_SITE_CREATE = "matomo_site_create";
 
     private MatomoInstance matomoInstance;
-    private PiwikTracker mamotoTracker;
+    private PiwikTracker matomoTracker;
     private boolean running;
     private final Configuration configuration;
 
@@ -43,7 +43,7 @@ public class MatomoOutput implements MessageOutput {
         }
         configuration = c;
         matomoInstance = new MatomoInstance(c.getString(MATOMO_URL), c.getString(MATOMO_TOKEN));
-        mamotoTracker = new PiwikTracker(c.getString(MATOMO_URL)+"/matomo.php");
+        matomoTracker = new PiwikTracker(c.getString(MATOMO_URL)+"/matomo.php");
         running = true;
     }
 
@@ -86,7 +86,7 @@ public class MatomoOutput implements MessageOutput {
         piwikRequest.setVisitorIp(remote_addr);
         piwikRequest.setHeaderUserAgent(http_user_agent);
 
-        mamotoTracker.sendRequest(piwikRequest);
+        matomoTracker.sendRequest(piwikRequest);
 
         //sender.sendMessage(message);
     }
