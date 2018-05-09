@@ -1,4 +1,4 @@
-package uk.co.znik.graylog.plugins.mamoto;
+package uk.co.znik.graylog.plugins.matomo;
 
 import org.graylog2.plugin.PluginMetaData;
 import org.graylog2.plugin.ServerStatus;
@@ -9,13 +9,13 @@ import java.util.Collections;
 import java.util.Set;
 
 
-public class MamotoMetaData implements PluginMetaData{
+public class MatomoMetaData implements PluginMetaData{
 
-    private static final String PLUGIN_PROPERTIES = "org.graylog.plugins.graylog-plugin-mamoto/graylog-plugin.properties";
+    private static final String PLUGIN_PROPERTIES = "graylog-plugin-matomo/graylog-plugin.properties";
 
     @Override
     public String getUniqueId() {
-        return "uk.co.znik.graylog.plugins.MamotoPlugin";
+        return "uk.co.znik.graylog.plugins.MatomoPlugin";
     }
 
     @Override
@@ -30,7 +30,7 @@ public class MamotoMetaData implements PluginMetaData{
 
     @Override
     public URI getURL() {
-        return URI.create("https://gitlab.com/petzah/graylog-plugin-mamoto");
+        return URI.create("https://gitlab.com/petzah/graylog-plugin-matomo");
     }
 
     @Override

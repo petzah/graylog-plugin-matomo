@@ -14,7 +14,7 @@
         <relativePath>../graylog2-server/graylog-plugin-parent</relativePath>
     </parent>
 
-    <artifactId>graylog-plugin-mamoto</artifactId>
+    <artifactId>graylog-plugin-matomo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -22,9 +22,9 @@
     <description>Graylog Mamoto plugin.</description>
 
     <scm>
-        <connection>scm:git:git@gitlab.com:petzah/graylog-plugin-mamoto.git</connection>
-        <developerConnection>sscm:git:git@gitlab.com:petzah/graylog-plugin-mamoto.git</developerConnection>
-        <url>https://gitlab.com/petzah/graylog-plugin-mamoto</url>
+        <connection>scm:git:git@gitlab.com:petzah/graylog-plugin-matomo.git</connection>
+        <developerConnection>sscm:git:git@gitlab.com:petzah/graylog-plugin-matomo.git</developerConnection>
+        <url>https://gitlab.com/petzah/graylog-plugin-matomo</url>
         <tag>HEAD</tag>
     </scm>
 

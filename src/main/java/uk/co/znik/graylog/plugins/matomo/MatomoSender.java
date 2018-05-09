@@ -1,4 +1,4 @@
-package uk.co.znik.graylog.plugins.mamoto;
+package uk.co.znik.graylog.plugins.matomo;
 
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -11,9 +11,9 @@ import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class MamotoSender implements Sender {
+public class MatomoSender implements Sender {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MamotoSender.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MatomoSender.class);
     private final Map<String, Integer> CACHE_SITE_ID = new HashMap<String, Integer>();
 
     private final String token;
@@ -23,7 +23,7 @@ public class MamotoSender implements Sender {
     private boolean initialized = false;
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
 
-    public MamotoSender(String uri, String token) {
+    public MatomoSender(String uri, String token) {
         this.uri = uri;
         this.token = token;
         this.queue =  new LinkedBlockingQueue<>(512);

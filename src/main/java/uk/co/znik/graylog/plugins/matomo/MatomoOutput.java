@@ -1,4 +1,4 @@
-package uk.co.znik.graylog.plugins.mamoto;
+package uk.co.znik.graylog.plugins.matomo;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
@@ -23,33 +23,33 @@ import java.net.URL;
 import java.util.List;
 
 
-public class MamotoOutput implements MessageOutput {
+public class MatomoOutput implements MessageOutput {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MamotoOutput.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MatomoOutput.class);
 
-    private static final String PIWIK_URL = "mamoto_url";
-    private static final String PIWIK_TOKEN = "mamoto_token";
-    private static final String PIWIK_SITE_CREATE = "mamoto_site_create";
+    private static final String MATOMO_URL = "matomo_url";
+    private static final String MATOMO_TOKEN = "matomo_token";
+    private static final String MATOMO_SITE_CREATE = "matomo_site_create";
 
-    private MamotoInstance mamotoInstance;
+    private MatomoInstance matomoInstance;
     private PiwikTracker mamotoTracker;
     private boolean running;
     private final Configuration configuration;
 
     @Inject
-    public MamotoOutput(@Assisted Configuration c) throws MessageOutputConfigurationException {
+    public MatomoOutput(@Assisted Configuration c) throws MessageOutputConfigurationException {
         if (!checkConfiguration(c)) {
             throw new MessageOutputConfigurationException("Missing or incorrect configuration.");
         }
         configuration = c;
-        mamotoInstance = new MamotoInstance(c.getString(PIWIK_URL), c.getString(PIWIK_TOKEN));
-        mamotoTracker = new PiwikTracker(c.getString(PIWIK_URL)+"/mamoto.php");
+        matomoInstance = new MatomoInstance(c.getString(MATOMO_URL), c.getString(MATOMO_TOKEN));
+        mamotoTracker = new PiwikTracker(c.getString(MATOMO_URL)+"/matomo.php");
         running = true;
     }
 
     private boolean checkConfiguration(Configuration c) {
-        return c.stringIsSet(PIWIK_URL)
-                && c.stringIsSet(PIWIK_TOKEN);
+        return c.stringIsSet(MATOMO_URL)
+                && c.stringIsSet(MATOMO_TOKEN);
     }
 
     @Override
@@ -72,15 +72,15 @@ public class MamotoOutput implements MessageOutput {
         if ((host == null) || (request_uri == null) || (request_scheme == null))
             return;
         // http or https?
-        MamotoSite mamotoSite = mamotoInstance.getSite(host);
-        if (mamotoSite == null && configuration.getBoolean(PIWIK_SITE_CREATE)) {
-            mamotoSite = mamotoInstance.addNewSite(host, request_scheme+host);
+        MatomoSite matomoSite = matomoInstance.getSite(host);
+        if (matomoSite == null && configuration.getBoolean(MATOMO_SITE_CREATE)) {
+            matomoSite = matomoInstance.addNewSite(host, request_scheme+host);
         }
 
         URL actionUrl = new URL(request_scheme+host+request_uri);
 
-        PiwikRequest piwikRequest = new PiwikRequest(mamotoSite.getIdsite(), actionUrl);
-        piwikRequest.setAuthToken(configuration.getString(PIWIK_TOKEN)); // must be first
+        PiwikRequest piwikRequest = new PiwikRequest(matomoSite.getIdsite(), actionUrl);
+        piwikRequest.setAuthToken(configuration.getString(MATOMO_TOKEN)); // must be first
 
         piwikRequest.setVisitorId(visitorId);
         piwikRequest.setVisitorIp(remote_addr);
@@ -104,10 +104,10 @@ public class MamotoOutput implements MessageOutput {
     }
 
     @FactoryClass
-    public interface Factory extends MessageOutput.Factory<MamotoOutput> {
+    public interface Factory extends MessageOutput.Factory<MatomoOutput> {
 
         @Override
-        MamotoOutput create(Stream stream, Configuration configuration);
+        MatomoOutput create(Stream stream, Configuration configuration);
 
         @Override
         Config getConfig();
@@ -123,18 +123,18 @@ public class MamotoOutput implements MessageOutput {
             final ConfigurationRequest configurationRequest = new ConfigurationRequest();
 
             configurationRequest.addField(new TextField(
-                    PIWIK_URL, "Piwik URI", "",
-                    "HTTP address of mamoto installation",
+                    MATOMO_URL, "Piwik URI", "",
+                    "HTTP address of matomo installation",
                     ConfigurationField.Optional.NOT_OPTIONAL)
             );
             configurationRequest.addField(new TextField(
-                    PIWIK_TOKEN, "Piwik Token", "",
+                    MATOMO_TOKEN, "Piwik Token", "",
                     "Piwik user token to access API",
                     ConfigurationField.Optional.NOT_OPTIONAL)
             );
             configurationRequest.addField(new BooleanField(
-                    PIWIK_SITE_CREATE, "Create sites", false,
-                    "Create sites in mamoto installation if not exist from $HTTP_HOST.")
+                    MATOMO_SITE_CREATE, "Create sites", false,
+                    "Create sites in matomo installation if not exist from $HTTP_HOST.")
             );
             return configurationRequest;
         }

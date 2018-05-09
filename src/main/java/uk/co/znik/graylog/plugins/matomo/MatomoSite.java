@@ -1,7 +1,7 @@
-package uk.co.znik.graylog.plugins.mamoto;
+package uk.co.znik.graylog.plugins.matomo;
 
 
-public class MamotoSite {
+public class MatomoSite {
 
     private String name;
     private String main_url;
@@ -11,11 +11,11 @@ public class MamotoSite {
     /**
      * for ObjectMapper
      */
-    MamotoSite() {
+    MatomoSite() {
         super();
     }
 
-    MamotoSite(String name, int idsite, String main_url) {
+    MatomoSite(String name, int idsite, String main_url) {
         this.name = name;
         this.main_url = main_url;
         this.idsite = idsite;
