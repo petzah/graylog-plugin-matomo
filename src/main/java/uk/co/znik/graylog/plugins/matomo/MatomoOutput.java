@@ -43,7 +43,7 @@ public class MatomoOutput implements MessageOutput {
         }
         configuration = c;
         matomoInstance = new MatomoInstance(c.getString(MATOMO_URL), c.getString(MATOMO_TOKEN));
-        matomoTracker = new PiwikTracker(c.getString(MATOMO_URL)+"/matomo.php");
+        matomoTracker = new PiwikTracker(c.getString(MATOMO_URL)+"/piwik.php");
         running = true;
     }
 
