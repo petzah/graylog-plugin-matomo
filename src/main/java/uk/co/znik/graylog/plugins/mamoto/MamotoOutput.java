@@ -52,10 +52,12 @@ public class MamotoOutput implements MessageOutput {
                 && c.stringIsSet(PIWIK_TOKEN);
     }
 
+    @Override
     public boolean isRunning() {
         return running;
     }
 
+    @Override
     public void write(Message message) throws Exception {
         //LOG.warn("DEBUG: message is: " + message);
         String request_scheme = (String) message.getField("request_scheme")+"://";
@@ -89,11 +91,13 @@ public class MamotoOutput implements MessageOutput {
         //sender.sendMessage(message);
     }
 
+    @Override
     public void write(List<Message> messages) throws Exception {
 
 
     }
 
+    @Override
     public void stop() {
         //sender.stop()
         running = false;
