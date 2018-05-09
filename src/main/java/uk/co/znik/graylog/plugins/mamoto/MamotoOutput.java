@@ -106,10 +106,13 @@ public class MamotoOutput implements MessageOutput {
     @FactoryClass
     public interface Factory extends MessageOutput.Factory<MamotoOutput> {
 
+        @Override
         MamotoOutput create(Stream stream, Configuration configuration);
 
+        @Override
         Config getConfig();
 
+        @Override
         Descriptor getDescriptor();
     }
 
