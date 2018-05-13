@@ -21,7 +21,7 @@ public class MatomoInstance {
         LOG.warn("DEBUG: Loaded " + siteList.size() + " sites from " + matomoUrl);
     }
 
-    public MatomoSite getSite(String name) {
+    synchronized public MatomoSite getSite(String name) {
         MatomoSite matomoSite = null;
         try {
             return siteList.stream().filter(s -> s.getName().equals(name)).findFirst().get();
@@ -40,7 +40,7 @@ public class MatomoInstance {
         siteList.add(matomoSite);
     }
 
-    public MatomoSite getSite(Integer siteid) {
+    synchronized public MatomoSite getSite(Integer siteid) {
         return siteList.stream().filter(s -> s.getIdsite().equals(siteid)).findFirst().get();
     }
 
