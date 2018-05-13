@@ -66,6 +66,7 @@ public class MatomoOutput implements MessageOutput {
         String request_uri = (String) message.getField("request_uri");
         String remote_addr = (String) message.getField("remote_addr");
         String http_user_agent = (String) message.getField("http_user_agent");
+        String http_referrer = (String) message.getField("http_referrer");
 
         String visitorId = DigestUtils.sha1Hex(remote_addr+http_user_agent).substring(0,16);
 
@@ -86,6 +87,7 @@ public class MatomoOutput implements MessageOutput {
         piwikRequest.setVisitorId(visitorId);
         piwikRequest.setVisitorIp(remote_addr);
         piwikRequest.setHeaderUserAgent(http_user_agent);
+        piwikRequest.setReferrerUrlWithString(http_referrer);
 
         matomoTracker.sendRequest(piwikRequest);
 
