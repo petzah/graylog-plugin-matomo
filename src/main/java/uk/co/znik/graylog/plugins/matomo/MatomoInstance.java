@@ -29,24 +29,24 @@ public class MatomoInstance {
             matomoSite = matomoHttp.getSiteFromMatomo(name);
             if (matomoSite != null) {
                 LOG.warn("DEBUG: Got site " + matomoSite.getName() + " from matomo server: " + this);
-                addSite(matomoSite);
+                cacheSite(matomoSite);
             }
         }
         return matomoSite;
     }
 
-    private void addSite(MatomoSite matomoSite) {
+    private void cacheSite(MatomoSite matomoSite) {
         LOG.warn("DEBUG: Adding " + matomoSite + " to cache");
         siteList.add(matomoSite);
     }
 
-    synchronized public MatomoSite getSite(Integer siteid) {
+    public MatomoSite getSite(Integer siteid) {
         return siteList.stream().filter(s -> s.getIdsite().equals(siteid)).findFirst().get();
     }
 
     public MatomoSite addNewSite(String name, String main_url) {
         MatomoSite matomoSite = matomoHttp.addNewSite(name, main_url);
-        addSite(matomoSite);
+        cacheSite(matomoSite);
         return matomoSite;
     }
 
