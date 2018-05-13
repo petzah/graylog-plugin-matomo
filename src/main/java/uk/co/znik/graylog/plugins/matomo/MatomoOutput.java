@@ -61,7 +61,7 @@ public class MatomoOutput implements MessageOutput {
     @Override
     public void write(Message message) throws Exception {
         //LOG.warn("DEBUG: message is: " + message);
-        String request_scheme = (String) message.getField("request_scheme")+"://";
+        String request_scheme = (String) message.getField("request_scheme");
         String host = (String) message.getField("host");
         String request_uri = (String) message.getField("request_uri");
         String remote_addr = (String) message.getField("remote_addr");
@@ -76,10 +76,10 @@ public class MatomoOutput implements MessageOutput {
         // http or https?
         MatomoSite matomoSite = matomoInstance.getSite(host);
         if (matomoSite == null && configuration.getBoolean(MATOMO_SITE_CREATE)) {
-            matomoSite = matomoInstance.addNewSite(host, request_scheme+host);
+            matomoSite = matomoInstance.addNewSite(host, String.format("%s://%s", request_scheme, host));
         }
 
-        URL actionUrl = new URL(request_scheme+host+request_uri);
+        URL actionUrl = new URL(String.format("%s://%s%s", request_scheme, host, request_uri));
 
         PiwikRequest piwikRequest = new PiwikRequest(matomoSite.getIdsite(), actionUrl);
         piwikRequest.setAuthToken(configuration.getString(MATOMO_TOKEN)); // must be first
