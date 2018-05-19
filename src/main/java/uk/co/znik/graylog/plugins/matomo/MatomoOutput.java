@@ -14,12 +14,16 @@ import org.graylog2.plugin.inputs.annotations.FactoryClass;
 import org.graylog2.plugin.outputs.MessageOutput;
 import org.graylog2.plugin.outputs.MessageOutputConfigurationException;
 import org.graylog2.plugin.streams.Stream;
+import org.piwik.java.tracking.PiwikDate;
 import org.piwik.java.tracking.PiwikRequest;
 import org.piwik.java.tracking.PiwikTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 
@@ -67,6 +71,7 @@ public class MatomoOutput implements MessageOutput {
         String remote_addr = (String) message.getField("remote_addr");
         String http_user_agent = (String) message.getField("http_user_agent");
         String http_referrer = (String) message.getField("http_referrer");
+        String time_iso8601 = (String) message.getField("time_iso8601");
 
         String visitorId = DigestUtils.sha1Hex(remote_addr+http_user_agent).substring(0,16);
 
@@ -89,6 +94,8 @@ public class MatomoOutput implements MessageOutput {
         PiwikRequest piwikRequest = new PiwikRequest(matomoSite.getIdsite(), actionUrl);
         piwikRequest.setAuthToken(configuration.getString(MATOMO_TOKEN)); // must be first
 
+        piwikRequest.setRequestDatetime((PiwikDate) Date.from(
+                Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse(time_iso8601))));
         piwikRequest.setVisitorId(visitorId);
         piwikRequest.setVisitorIp(remote_addr);
         piwikRequest.setHeaderUserAgent(http_user_agent);
