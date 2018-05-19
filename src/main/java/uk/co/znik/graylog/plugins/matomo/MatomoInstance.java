@@ -18,7 +18,7 @@ public class MatomoInstance {
         this.matomoUrl = matomoUrl;
         this.matomoHttp = new MatomoHttp(matomoUrl, matomoToken);
         this.siteList = matomoHttp.getAllSites();
-        LOG.info("Loaded %d sites to cache from %s", siteList.size(), matomoUrl)
+        LOG.info("Loaded {} sites to cache from {}", siteList.size(), matomoUrl);
     }
 
     synchronized public MatomoSite getSite(String name) {
@@ -28,7 +28,7 @@ public class MatomoInstance {
         } catch (NoSuchElementException e) {
             matomoSite = matomoHttp.getSiteFromMatomo(name);
             if (matomoSite != null) {
-                LOG.debug("Got site %s from matomo instance %s",matomoSite, this);
+                LOG.debug("Got site {} from matomo instance {}", matomoSite, this);
                 cacheSite(matomoSite);
             }
         }
@@ -37,7 +37,7 @@ public class MatomoInstance {
 
     private void cacheSite(MatomoSite matomoSite) {
         siteList.add(matomoSite);
-        LOG.debug("Added %s to cache", matomoSite);
+        LOG.debug("Added {} to cache", matomoSite);
     }
 
     public MatomoSite getSite(Integer siteid) {
