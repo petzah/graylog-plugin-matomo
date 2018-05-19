@@ -13,7 +13,7 @@
     </parent>
 
     <artifactId>graylog-plugin-matomo</artifactId>
-    <version>0.0.4-SNAPSHOT</version>
+    <version>0.0.3</version>
     <packaging>jar</packaging>
 
     <name>${project.artifactId}</name>
@@ -23,7 +23,7 @@
         <connection>scm:git:git@github.com:petzah/graylog-plugin-matomo.git</connection>
         <developerConnection>scm:git:git@github.com:petzah/graylog-plugin-matomo.git</developerConnection>
         <url>https://github.com/petzah/graylog-plugin-matomo</url>
-        <tag>HEAD</tag>
+        <tag>v0.0.3</tag>
     </scm>
 
     <properties>
