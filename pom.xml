@@ -23,7 +23,7 @@
 
     <scm>
         <connection>scm:git:git@gitlab.com:petzah/graylog-plugin-matomo.git</connection>
-        <developerConnection>sscm:git:git@gitlab.com:petzah/graylog-plugin-matomo.git</developerConnection>
+        <developerConnection>scm:git:git@gitlab.com:petzah/graylog-plugin-matomo.git</developerConnection>
         <url>https://gitlab.com/petzah/graylog-plugin-matomo</url>
         <tag>HEAD</tag>
     </scm>
