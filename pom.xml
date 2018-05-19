@@ -20,9 +20,9 @@
     <description>Graylog Matomo plugin.</description>
 
     <scm>
-        <connection>scm:git:git@gitlab.com:petzah/graylog-plugin-matomo.git</connection>
-        <developerConnection>scm:git:git@gitlab.com:petzah/graylog-plugin-matomo.git</developerConnection>
-        <url>https://gitlab.com/petzah/graylog-plugin-matomo</url>
+        <connection>scm:git:git@github.com:petzah/graylog-plugin-matomo.git</connection>
+        <developerConnection>scm:git:git@github.com:petzah/graylog-plugin-matomo.git</developerConnection>
+        <url>https://github.com/petzah/graylog-plugin-matomo</url>
         <tag>HEAD</tag>
     </scm>
 
