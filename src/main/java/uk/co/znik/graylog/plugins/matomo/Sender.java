@@ -1,4 +1,4 @@
-package uk.co.znik.graylog.plugins.piwik;
+package uk.co.znik.graylog.plugins.matomo;
 
 import org.graylog2.plugin.Message;
 

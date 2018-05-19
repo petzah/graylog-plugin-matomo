@@ -1,6 +1,7 @@
-package uk.co.znik.graylog.plugins.piwik;
+package uk.co.znik.graylog.plugins.matomo;
 
-public class PiwikSite {
+
+public class MatomoSite {
 
     private String name;
     private String main_url;
@@ -10,11 +11,11 @@ public class PiwikSite {
     /**
      * for ObjectMapper
      */
-    PiwikSite() {
+    MatomoSite() {
         super();
     }
 
-    PiwikSite(String name, int idsite, String main_url) {
+    MatomoSite(String name, int idsite, String main_url) {
         this.name = name;
         this.main_url = main_url;
         this.idsite = idsite;
@@ -31,5 +32,9 @@ public class PiwikSite {
     @Override
     public String toString() {
         return name;
+    }
+
+    public String getMainUrl() {
+        return main_url;
     }
 }

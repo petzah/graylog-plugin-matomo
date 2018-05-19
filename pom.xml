@@ -7,31 +7,87 @@
         <maven>3.1</maven>
     </prerequisites>
 
+    <parent>
+        <groupId>org.graylog.plugins</groupId>
+        <artifactId>graylog-plugin-parent</artifactId>
+        <version>2.4.4</version>
+        <relativePath>../graylog2-server/graylog-plugin-parent</relativePath>
+    </parent>
 
-    <groupId>org.graylog.plugins</groupId>
-    <artifactId>graylog-plugin-piwik</artifactId>
+    <artifactId>graylog-plugin-matomo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
+    <name>${project.artifactId}</name>
+    <description>Graylog Matomo plugin.</description>
+
+    <scm>
+        <connection>scm:git:git@gitlab.com:petzah/graylog-plugin-matomo.git</connection>
+        <developerConnection>sscm:git:git@gitlab.com:petzah/graylog-plugin-matomo.git</developerConnection>
+        <url>https://gitlab.com/petzah/graylog-plugin-matomo</url>
+        <tag>HEAD</tag>
+    </scm>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <maven.source.skip>true</maven.source.skip>
         <maven.javadoc.skip>true</maven.javadoc.skip>
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
         <maven.site.skip>true</maven.site.skip>
 
-        <graylog.version>2.3.2</graylog.version>
+        <graylog.version>2.4.4</graylog.version>
+        <graylog.plugin-dir>/usr/share/graylog-server/plugin</graylog.plugin-dir>
         <piwik.version>1.2</piwik.version>
+        <okhttp.version>3.9.0</okhttp.version>
+
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
+                <version>${jackson.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.piwik.java.tracking/piwik-java-tracker -->
+        <dependency>
+            <groupId>com.google.auto.value</groupId>
+            <artifactId>auto-value</artifactId>
+            <version>${auto-value.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>${okhttp.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.piwik.java.tracking</groupId>
             <artifactId>piwik-java-tracker</artifactId>
             <version>${piwik.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.graylog2</groupId>
             <artifactId>graylog2-server</artifactId>
@@ -42,28 +98,48 @@
 
 
     <build>
+        <resources>
+            <resource>
+                <directory>build</directory>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
-                    <finalName>${project.artifactId}-${project.version}</finalName>
-                    <appendAssemblyId>false</appendAssemblyId>
                     <archive>
-                        <manifest>
-                            <mainClass>uk.co.znik.graylog.plugins.piwik.PiwikPlugin</mainClass>
-                        </manifest>
+                        <manifestEntries>
+                            <Graylog-Plugin-Properties-Path>${project.groupId}.${project.artifactId}</Graylog-Plugin-Properties-Path>
+                        </manifestEntries>
                     </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
                 </configuration>
             </plugin>
+
+             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessors>
+                        <annotationProcessor>com.google.auto.value.processor.AutoValueProcessor</annotationProcessor>
+                    </annotationProcessors>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4.3</version>
                 <configuration>
                     <minimizeJar>false</minimizeJar>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                    <transformers>
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                    </transformers>
                 </configuration>
                 <executions>
                     <execution>
@@ -71,24 +147,42 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
-                        <configuration>
-                            <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                            </transformers>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
+                <artifactId>jdeb</artifactId>
+                <groupId>org.vafer</groupId>
+                <version>${jdeb.version}</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <deb>${project.build.directory}/${project.artifactId}-${project.version}.deb</deb>
+                    <dataSet>
+                        <data>
+                            <src>${project.build.directory}/${project.build.finalName}.jar</src>
+                            <type>file</type>
+                            <mapper>
+                                <type>perm</type>
+                                <prefix>${graylog.plugin-dir}</prefix>
+                                <filemode>644</filemode>
+                                <user>root</user>
+                                <group>root</group>
+                            </mapper>
+                        </data>
+                    </dataSet>
                 </configuration>
-                <version>3.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemProperties>
+                        <property>
+                            <name>io.netty.leakDetectionLevel</name>
+                            <value>PARANOID</value>
+                        </property>
+                    </systemProperties>
+                </configuration>
             </plugin>
         </plugins>
     </build>
