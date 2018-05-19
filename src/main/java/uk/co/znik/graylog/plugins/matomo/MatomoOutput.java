@@ -94,8 +94,8 @@ public class MatomoOutput implements MessageOutput {
         PiwikRequest piwikRequest = new PiwikRequest(matomoSite.getIdsite(), actionUrl);
         piwikRequest.setAuthToken(configuration.getString(MATOMO_TOKEN)); // must be first
 
-        piwikRequest.setRequestDatetime((PiwikDate) Date.from(
-                Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse(time_iso8601))));
+        piwikRequest.setRequestDatetime(new PiwikDate(
+                Date.from(Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse(time_iso8601))).getTime()));
         piwikRequest.setVisitorId(visitorId);
         piwikRequest.setVisitorIp(remote_addr);
         piwikRequest.setHeaderUserAgent(http_user_agent);
