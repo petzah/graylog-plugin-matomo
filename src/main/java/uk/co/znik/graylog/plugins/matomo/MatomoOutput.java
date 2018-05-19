@@ -30,6 +30,7 @@ public class MatomoOutput implements MessageOutput {
     private static final String MATOMO_URL = "matomo_url";
     private static final String MATOMO_TOKEN = "matomo_token";
     private static final String MATOMO_SITE_CREATE = "matomo_site_create";
+    private static final String MATOMO_SITE_WWW_SEPARATE = "matomo_site_www_separate";
     private static final String MATOMO_PHP_FILE="piwik.php";
 
     private MatomoInstance matomoInstance;
@@ -76,7 +77,12 @@ public class MatomoOutput implements MessageOutput {
         // http or https?
         MatomoSite matomoSite = matomoInstance.getSite(host);
         if (matomoSite == null && configuration.getBoolean(MATOMO_SITE_CREATE)) {
-            matomoSite = matomoInstance.addNewSite(host, String.format("%s://%s", request_scheme, host));
+            String siteName = host;
+            if (!configuration.getBoolean(MATOMO_SITE_WWW_SEPARATE)) {
+                siteName = siteName.replaceFirst("^www\\.","");
+            }
+            String mainUrl = String.format("%s/%s", request_scheme, siteName);
+            matomoSite = matomoInstance.addNewSite(siteName, mainUrl);
         }
 
         URL actionUrl = new URL(String.format("%s://%s%s", request_scheme, host, request_uri));
@@ -138,6 +144,10 @@ public class MatomoOutput implements MessageOutput {
             configurationRequest.addField(new BooleanField(
                     MATOMO_SITE_CREATE, "Create sites", false,
                     "Create sites in matomo installation if not exist from $HTTP_HOST.")
+            );
+            configurationRequest.addField(new BooleanField(
+                    MATOMO_SITE_WWW_SEPARATE, "Separate site for www", false,
+                    "Create separate sites for www:  www.example.com vs. example.com")
             );
             return configurationRequest;
         }
