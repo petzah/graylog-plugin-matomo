@@ -61,7 +61,6 @@ public class MatomoOutput implements MessageOutput {
 
     @Override
     public void write(Message message) throws Exception {
-        //LOG.warn("DEBUG: message is: " + message);
         String request_scheme = (String) message.getField("request_scheme");
         String host = (String) message.getField("host");
         String request_uri = (String) message.getField("request_uri");

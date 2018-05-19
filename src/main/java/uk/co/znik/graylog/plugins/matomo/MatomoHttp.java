@@ -39,7 +39,6 @@ public class MatomoHttp {
     }
 
     List<MatomoSite> getAllSites() {
-        LOG.warn("DEBUG: getting all sites from matomo");
         List<MatomoSite> sites = null;
         HashMap<String, String> params = new HashMap<>();
         params.put("method", "SitesManager.getAllSites");
@@ -74,13 +73,11 @@ public class MatomoHttp {
         JsonNode rootNode = getJsonResponse(callMatomoApi(params));
         if (rootNode.size() != 0) {
             matomoSite = getSiteFromMatomo(rootNode.get(0).path("idsite").asInt());
-            LOG.warn("DEBUG: Got site: " + matomoSite.getName() + " from matomo with id: " + matomoSite.getIdsite());
         }
         return matomoSite;
     }
 
     public MatomoSite addNewSite(String name, String main_url) {
-        LOG.warn("DEBUG: Adding new site with name: " + name);
         HashMap<String, String> params = new HashMap<>();
         params.put("urls[0]", main_url);
         params.put("siteName", name);
@@ -96,7 +93,6 @@ public class MatomoHttp {
         try {
             jsonNode = objectMapper.readTree(responseBody);
         } catch (IOException e) {
-            LOG.error("Can't parse JSON from HTTP response.");
             e.printStackTrace();
         }
         return jsonNode;
