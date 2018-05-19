@@ -18,7 +18,7 @@ public class MatomoInstance {
         this.matomoUrl = matomoUrl;
         this.matomoHttp = new MatomoHttp(matomoUrl, matomoToken);
         this.siteList = matomoHttp.getAllSites();
-        LOG.info("Loaded %d sites to cache from %s", siteList.size(), matomoUrl)
+        LOG.info("Loaded %d sites to cache from %s", siteList.size(), matomoUrl);
     }
 
     synchronized public MatomoSite getSite(String name) {
