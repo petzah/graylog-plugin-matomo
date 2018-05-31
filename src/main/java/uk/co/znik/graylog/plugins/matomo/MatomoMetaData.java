@@ -30,7 +30,7 @@ public class MatomoMetaData implements PluginMetaData{
 
     @Override
     public URI getURL() {
-        return URI.create("https://gitlab.com/petzah/graylog-plugin-matomo");
+        return URI.create("https://github.com/petzah/graylog-plugin-matomo");
     }
 
     @Override
@@ -39,7 +39,7 @@ public class MatomoMetaData implements PluginMetaData{
     }
     @Override
     public String getDescription() {
-        return "Writes messages to Matomo installation.";
+        return "Write tacking info to Matomo instance.";
     }
 
     @Override
